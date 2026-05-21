@@ -104,3 +104,58 @@ def reset():
     ostacoli = []
     particelle = []
     
+# =========================
+# SISTEMA PARTICELLE (EFFETTO MORTE)
+# =========================
+def crea_particelle(x, y):
+    for _ in range(22):
+        particelle.append([
+            x, y,
+            random.uniform(-3, 3),
+            random.uniform(-3, 3),
+            random.randint(25, 45)
+        ])
+
+# =========================
+# DISEGNO NUVOLE
+# =========================
+def disegna_nuvola(x, y, scala):
+    pygame.draw.circle(screen, BIANCO, (int(x), int(y)), int(18 * scala))
+    pygame.draw.circle(screen, BIANCO, (int(x + 20 * scala), int(y - 10 * scala)), int(22 * scala))
+    pygame.draw.circle(screen, BIANCO, (int(x + 45 * scala), int(y)), int(20 * scala))
+    pygame.draw.circle(screen, BIANCO, (int(x + 25 * scala), int(y + 10 * scala)), int(22 * scala))
+
+# =========================
+# LOOP PRINCIPALE
+# =========================
+gioco_attivo = True
+
+while gioco_attivo:
+
+    clock.tick(60)
+
+    # =========================
+    # EVENTI INPUT
+    # =========================
+    for evento in pygame.event.get():
+        if evento.type == pygame.QUIT:
+            gioco_attivo = False
+
+        if evento.type == pygame.KEYDOWN:
+            if stato == "menu":
+                if evento.key == pygame.K_SPACE:
+                    reset()
+                    stato = "game"
+
+            elif stato == "gameover":
+                if evento.key == pygame.K_r:
+                    reset()
+                    stato = "game"
+                if evento.key == pygame.K_h:
+                    stato = "menu"
+
+            elif stato == "game":
+                if evento.key == pygame.K_UP:
+                    player[2] = spinta
+
+    tasti = pygame.key.get_pressed()
