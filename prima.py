@@ -47,3 +47,60 @@ else:
 # STATO DEL GIOCO
 # =========================
 stato = "menu"   # menu / game / gameover
+# =========================
+# PLAYER (x, y, velocità verticale)
+# =========================
+player = [70, 320, 0.0]
+dimensione_player = 26
+
+gravita = 0.38       # forza che spinge verso il basso
+spinta = -6.5        # salto verso l'alto
+
+# =========================
+# VARIABILI DI GIOCO
+# =========================
+punteggio = 0
+velocita = 3.5
+frame = 0
+notte = False
+conta_ostacoli = 0
+
+ostacoli = []
+particelle = []
+
+# =========================
+# STELLE (TUPLE IMMUTABILI)
+# =========================
+stelle = tuple(
+    (random.randint(0, LARGHEZZA),
+     random.randint(0, ALTEZZA),
+     random.randint(1, 2))
+    for _ in range(120)
+)
+
+# =========================
+# NUVOLE (LISTE MODIFICABILI)
+# =========================
+nuvole = [
+    [random.randint(0, LARGHEZZA),
+     random.randint(40, 220),
+     random.uniform(0.6, 1.4)]
+    for _ in range(7)
+]
+
+# =========================
+# RESET GIOCO
+# =========================
+def reset():
+    global player, punteggio, velocita, frame, notte, conta_ostacoli
+    global ostacoli, particelle
+
+    player = [70, 320, 0.0]
+    punteggio = 0
+    velocita = 3.5
+    frame = 0
+    notte = False
+    conta_ostacoli = 0
+    ostacoli = []
+    particelle = []
+    
