@@ -253,4 +253,37 @@ while gioco_attivo:
     particelle = [p for p in particelle if p[4] > 0]
 
     # =========================
-    
+    # RENDERING GRAFICA
+    # =========================
+    screen.fill(SCURO if notte else AZZURRO)
+
+    if notte:
+        for s in stelle:
+            pygame.draw.circle(screen, BIANCO, (s[0], s[1]), s[2])
+    else:
+        for n in nuvole:
+            disegna_nuvola(n[0], n[1], n[2])
+
+    # Disegno ostacoli rettangolari coerenti
+    for o in ostacoli:
+        colore = CIANO if notte else VERDE
+        # Rettangolo superiore
+        pygame.draw.rect(screen, colore, (int(o[0]), 0, 50, int(o[1])))
+        # Rettangolo inferiore
+        altezza_inferiore = ALTEZZA - (o[1] + o[2])
+        pygame.draw.rect(screen, colore, (int(o[0]), int(o[1] + o[2]), 50, int(altezza_inferiore)))
+
+    # Disegno player
+    if stato == "game":
+        colore_player = BIANCO if notte else NERO
+        pygame.draw.rect(screen, colore_player, (int(player[0]), int(player[1]), dimensione_player, dimensione_player))
+
+    # Disegno particelle esplosione morte
+    for p in particelle:
+        pygame.draw.circle(screen, BIANCO, (int(p[0]), int(p[1])), 2)
+
+    # Interfaccia Punteggio
+    if stato == "game":
+        testo_punti = font_grande.render(str(punteggio), True, BIANCO if notte else NERO)
+        screen.blit(testo_punti, (LARGHEZZA // 2 - testo_punti.get_width() // 2, 40))
+        
