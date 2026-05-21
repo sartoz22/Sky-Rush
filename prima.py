@@ -286,4 +286,23 @@ while gioco_attivo:
     if stato == "game":
         testo_punti = font_grande.render(str(punteggio), True, BIANCO if notte else NERO)
         screen.blit(testo_punti, (LARGHEZZA // 2 - testo_punti.get_width() // 2, 40))
-        
+        # =========================
+    # SCHERMATA: GAME OVER
+    # =========================
+    if stato == "gameover":
+        testo_go = font_grande.render("GAME OVER", True, BIANCO)
+        screen.blit(testo_go, (LARGHEZZA // 2 - testo_go.get_width() // 2, 220))
+
+        testo_score = font.render(f"Punteggio Corrente: {punteggio}", True, BIANCO)
+        screen.blit(testo_score, (LARGHEZZA // 2 - testo_score.get_width() // 2, 300))
+
+        istruzioni_r = font.render("Premi R per Riprovare", True, BIANCO)
+        screen.blit(istruzioni_r, (LARGHEZZA // 2 - istruzioni_r.get_width() // 2, 370))
+
+        istruzioni_h = font.render("Premi H per tornare al Menu", True, BIANCO)
+        screen.blit(istruzioni_h, (LARGHEZZA // 2 - istruzioni_h.get_width() // 2, 410))
+
+    pygame.display.update()
+
+pygame.quit()
+sys.exit()
