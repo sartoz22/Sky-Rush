@@ -243,3 +243,14 @@ while gioco_attivo:
 
         # Rimozione ostacoli vecchi passati a sinistra
         ostacoli = [o for o in ostacoli if o[0] > -100]
+        # =========================
+    # AGGIORNAMENTO PARTICELLE
+    # =========================
+    for p in particelle:
+        p[0] += p[2]
+        p[1] += p[3]
+        p[4] -= 1
+    particelle = [p for p in particelle if p[4] > 0]
+
+    # =========================
+    
