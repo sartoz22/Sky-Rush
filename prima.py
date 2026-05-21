@@ -159,3 +159,87 @@ while gioco_attivo:
                     player[2] = spinta
 
     tasti = pygame.key.get_pressed()
+# =========================
+    # SCHERMATA: MENU PRINCIPALE
+    # =========================
+    if stato == "menu":
+        screen.fill(NERO)
+        
+        titolo = font_grande.render("SKY RUSH", True, CIANO)
+        screen.blit(titolo, (LARGHEZZA // 2 - titolo.get_width() // 2, 200))
+
+        best = font.render(f"MIGLIOR PUNTEGGIO: {best_score}", True, BIANCO)
+        screen.blit(best, (LARGHEZZA // 2 - best.get_width() // 2, 320))
+
+        info = font.render("Premi SPAZIO per iniziare", True, BIANCO)
+        screen.blit(info, (LARGHEZZA // 2 - info.get_width() // 2, 380))
+
+        pygame.display.update()
+        continue
+
+    # =========================
+    # LOGICA DI GIOCO (Stato Game)
+    # =========================
+    if stato == "game":
+        frame += 1
+
+        # gravità applicata alla coordinata Y del player
+        player[2] += gravita
+        player[1] += player[2]
+
+        # movimento manuale veloce verso il basso
+        if tasti[pygame.K_DOWN]:
+            player[1] += 5
+
+        # limiti dello schermo per il player
+        if player[1] < 0:
+            player[1] = 0
+            player[2] = 0
+
+        if player[1] > ALTEZZA - dimensione_player:
+            player[1] = ALTEZZA - dimensione_player
+            player[2] = 0
+
+        # Movimento nuvole
+        for n in nuvole:
+            n[0] -= n[2]
+            if n[0] < -120:
+                n[0] = LARGHEZZA + 50
+                n[1] = random.randint(40, 220)
+
+        # Generazione bilanciata ostacoli
+        if frame % 75 == 0:
+            gap = random.randint(140, 170)  
+            altezza_top = random.randint(60, ALTEZZA - gap - 60) 
+            ostacoli.append([LARGHEZZA, altezza_top, gap, False])
+
+        # Aggiornamento ostacoli
+        for o in ostacoli:
+            o[0] -= velocita * 1.4
+
+            # Assegnazione punti al superamento dell'ostacolo
+            if not o[3] and o[0] < player[0]:
+                o[3] = True
+                punteggio += 1
+                conta_ostacoli += 1
+
+                if punteggio % 5 == 0:
+                    velocita += 0.25
+
+                if conta_ostacoli % 15 == 0:
+                    notte = not notte
+
+        # Gestione Collisioni di precisione
+        px, py = player[0], player[1]
+        for o in ostacoli:
+            if px < o[0] + 50 and px + dimensione_player > o[0]:
+                if py < o[1] or py + dimensione_player > o[1] + o[2]:
+                    crea_particelle(px + dimensione_player//2, py + dimensione_player//2)
+                    stato = "gameover"
+
+                    if punteggio > best_score:
+                        best_score = punteggio
+                        open(FILE_SCORE, "w").write(str(best_score))
+
+        # Rimozione ostacoli vecchi passati a sinistra
+        ostacoli = [o for o in ostacoli if o[0] > -100]
